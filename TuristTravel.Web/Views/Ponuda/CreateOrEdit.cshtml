@@ -1,0 +1,48 @@
+﻿@model TuristTravel.Model.Ponuda
+
+
+<div class="form-group">
+	<label class="control-label">Destinacija</label>
+	<select asp-for="DestinacijaID" asp-items="ViewBag.PossibleDestinacije" class="form-control"> </select>
+	<span asp-validation-for="DestinacijaID" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+	<label class="control-label">Naziv</label>
+	<input asp-for="Naziv" class="form-control" />
+	<span asp-validation-for="Naziv" class="text-danger"></span>
+</div>
+<div class="form-group">
+	<label class="control-label">Opis</label>
+	<input asp-for="Opis" class="form-control" />
+	<span asp-validation-for="Opis" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+	<label class="control-label">Cijena</label>
+	<input asp-for="Cijena" class="form-control" />
+	<span asp-validation-for="Cijena" class="text-danger"></span>
+</div>
+@{
+	// Malo hacky, ali funkcionira dobro za sve zapadne kulture, primjer moćnijih kultura su US ili RH.
+	var pattern = System.Threading.Thread.CurrentThread.CurrentCulture.DateTimeFormat.ShortDatePattern.ToLower();
+	pattern = pattern.Replace("DD", "D").Replace("D", "DD");
+	pattern = pattern.Replace("MM", "M").Replace("M", "MM");
+}
+<div class="form-group">
+	<label class="control-label">Datum pocetka</label>
+	<input asp-for="pocetakPutovanja" class="form-control" />
+	<span asp-validation-for="pocetakPutovanja" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+	<label class="control-label">Datum kraja</label>
+	<input asp-for="krajPutovanja" class="form-control" />
+	<span asp-validation-for="krajPutovanja" class="text-danger"></span>
+</div>
+
+
+
+<div class="form-group">
+	<input type="submit" value="Spremi" class="btn btn-outline-success" />
+</div>

@@ -1,0 +1,21 @@
+﻿@model TuristTravel.Model.Ponuda
+
+@{
+	ViewData["Title"] = "Uređivanje hotela";
+}
+
+<nav aria-label="breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a asp-action="Index">Popis ponuda</a></li>
+		<li class="breadcrumb-item active" aria-current="page">Uređivanje ponuda</li>
+	</ol>
+</nav>
+
+<div class="row">
+	<div class="col-md-4">
+		<form asp-action="Edit">
+			<input type="hidden" asp-for="ID" />
+			<partial name="CreateOrEdit" />
+		</form>
+	</div>
+</div>

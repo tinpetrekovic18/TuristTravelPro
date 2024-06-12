@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "About Us";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>@ViewData["Title"]</h1>
+            <p>
+                Welcome to our travel agency! We are dedicated to providing you with the best travel experiences.
+                Whether you're looking for a relaxing vacation or an adventurous trip, we have something for everyone.
+            </p>
+            <h2>Contact Information</h2>
+            <address>
+                <strong>Headquarters:</strong><br />
+                One Microsoft Way<br />
+                Redmond, WA 98052-6399<br />
+                <abbr title="Phone">P:</abbr> 425.555.0100<br />
+                <strong>Email:</strong> <a href="mailto:info@example.com">info@example.com</a>
+            </address>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 20px;">
+        <div class="col-md-12">
+            <h2>Our Location</h2>
+            <div class="embed-responsive embed-responsive-16by9">
+                <iframe class="embed-responsive-item" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.835434509378!2d144.96305791550417!3d-37.813627742021795!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf0727bb4fb0b7a0!2sFederation%20Square!5e0!3m2!1sen!2sau!4v1572522835241!5m2!1sen!2sau" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 20px;">
+        <div class="col-md-12">
+            <h2>Contact Us</h2>
+            <form action="/Home/SubmitQuery" method="post">
+                <div class="form-group">
+                    <label for="ime">First Name</label>
+                    <input type="text" class="form-control" id="ime" name="ime" placeholder="Enter your first name">
+                </div>
+                <div class="form-group">
+                    <label for="prezime">Last Name</label>
+                    <input type="text" class="form-control" id="prezime" name="prezime" placeholder="Enter your last name">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="poruka">Message</label>
+                    <textarea class="form-control" id="poruka" name="poruka" rows="5" placeholder="Enter your message"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="tip">Vrsta poruke</label>
+                    <select name="tip" id="tip" class="form-control">
+                        <option value="Pohvala">Pohvala</option>
+                        <option value="Upit">Upit</option>
+                        <option value="Poslovni prijedlog">Poslovni prijedlog</option>
+                        <option value="Žalba">Žalba</option>
+                    </select>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="newsletter" name="newsletter" value="true">
+                    <label class="form-check-label" for="newsletter">Subscribe to newsletter</label>
+                </div>
+                <input type="hidden" name="newsletter" value="false" />
+                <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Send Inquiry</button>
+            </form>
+        </div>
+    </div>
+</div>

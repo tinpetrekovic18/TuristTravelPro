@@ -1,0 +1,69 @@
+﻿@using TuristTravel.Model
+@model List<Destinacija>
+
+@{
+    ViewData["Title"] = "Destinacije";
+}
+
+<style>
+    .form-inline .form-group {
+        margin-right: 10px;
+    }
+
+    .form-inline {
+        margin-bottom: 20px;
+    }
+</style>
+
+<div style="margin-top: 20px;">
+    <h4>Destinacije</h4>
+    <form action="@Url.Action("AdvancedSearch")" method="post" class="form-inline">
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="Naziv" placeholder="Pretraga po nazivu">
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    <input type="number" class="form-control" name="Opis" placeholder="Opis">
+                </div>
+            </div>
+
+
+            <div class="col">
+                <button type="submit" class="btn btn-default">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <a asp-action="Create" class="btn btn-success float-right">Dodaj novu destinaciju</a>
+    </div>
+</div>
+
+<table style="margin-top: 20px;" class="table table-condensed">
+    <thead>
+        <tr>
+            <th>Naziv</th>
+            <th>Opis</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.ID">@item.Naziv</a>
+                </td>
+                <td>@item.Opis</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID">[edit]</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

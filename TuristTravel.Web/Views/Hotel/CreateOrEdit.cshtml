@@ -1,0 +1,31 @@
+﻿@model TuristTravel.Model.Hotel
+
+
+<div class="form-group">
+	<label class="control-label">Naziv</label>
+	<input asp-for="Naziv" class="form-control" />
+	<span asp-validation-for="Naziv" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+	<label class="control-label">Broj zvjezdica</label>
+	<input asp-for="brojZvjezdica" class="form-control" type="number" />
+	<span asp-validation-for="brojZvjezdica" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+	<label class="control-label">Adresa</label>
+	<input asp-for="Adresa" class="form-control" />
+	<span asp-validation-for="Adresa" class="text-danger"></span>
+</div>
+
+
+<div class="form-group">
+	<label class="control-label">Cijena noćenja</label>
+	<input asp-for="cijenaNocenja" class="form-control" type="number" />
+	<span asp-validation-for="cijenaNocenja" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+	<input type="submit" value="Spremi" class="btn btn-outline-success" />
+</div>
