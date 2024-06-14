@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace TuristTravel.DAL.Migrations
 {
     /// <inheritdoc />
@@ -32,6 +34,7 @@ namespace TuristTravel.DAL.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Naziv = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    brojZvjezdica = table.Column<int>(type: "int", nullable: false),
                     Adresa = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     cijenaNocenja = table.Column<int>(type: "int", nullable: false)
                 },
@@ -124,12 +127,17 @@ namespace TuristTravel.DAL.Migrations
             migrationBuilder.InsertData(
                 table: "Destinacije",
                 columns: new[] { "ID", "Naziv", "Opis" },
-                values: new object[] { 1, "Zagreb", "Very nice" });
+                values: new object[,]
+                {
+                    { 1, "Zagreb", "Very nice" },
+                    { 2, "Pula", "Odlicno" },
+                    { 3, "Dubrovnik", "Najjače" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Hoteli",
-                columns: new[] { "ID", "Adresa", "Naziv", "cijenaNocenja" },
-                values: new object[] { 1, "Zagreb", "Sheraton", 100 });
+                columns: new[] { "ID", "Adresa", "Naziv", "brojZvjezdica", "cijenaNocenja" },
+                values: new object[] { 1, "Zagreb", "Sheraton", 4, 100 });
 
             migrationBuilder.InsertData(
                 table: "Korisnici",

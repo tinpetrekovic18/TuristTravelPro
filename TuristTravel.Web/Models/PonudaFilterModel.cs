@@ -11,6 +11,8 @@ namespace TuristTravel.Web.Models
         public string Naziv { get; set; }
         public string Opis { get; set; }
         public int Cijena { get; set; }
+
+        public Hotel Hotel { get; set; }    
         public DateTime pocetakPutovanja { get; set; }
         public DateTime krajPutovanja { get; set; }
     }

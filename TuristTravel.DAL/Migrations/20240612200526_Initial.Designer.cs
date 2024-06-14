@@ -12,8 +12,8 @@ using TuristTravel.DAL;
 namespace TuristTravel.DAL.Migrations
 {
     [DbContext(typeof(ClientManagerDbContext))]
-    [Migration("20240612141618_HotelUpdate")]
-    partial class HotelUpdate
+    [Migration("20240612200526_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,6 +51,18 @@ namespace TuristTravel.DAL.Migrations
                             ID = 1,
                             Naziv = "Zagreb",
                             Opis = "Very nice"
+                        },
+                        new
+                        {
+                            ID = 2,
+                            Naziv = "Pula",
+                            Opis = "Odlicno"
+                        },
+                        new
+                        {
+                            ID = 3,
+                            Naziv = "Dubrovnik",
+                            Opis = "Najjače"
                         });
                 });
 
@@ -162,10 +174,10 @@ namespace TuristTravel.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("pocetakPutovanja")
+                    b.Property<DateTime>("krajPutovanja")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("zavrsetakPutovanja")
+                    b.Property<DateTime>("pocetakPutovanja")
                         .HasColumnType("datetime2");
 
                     b.HasKey("ID");

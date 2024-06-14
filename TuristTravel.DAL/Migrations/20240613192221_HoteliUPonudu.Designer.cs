@@ -12,8 +12,8 @@ using TuristTravel.DAL;
 namespace TuristTravel.DAL.Migrations
 {
     [DbContext(typeof(ClientManagerDbContext))]
-    [Migration("20240606160936_Initial")]
-    partial class Initial
+    [Migration("20240613192221_HoteliUPonudu")]
+    partial class HoteliUPonudu
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,6 +51,18 @@ namespace TuristTravel.DAL.Migrations
                             ID = 1,
                             Naziv = "Zagreb",
                             Opis = "Very nice"
+                        },
+                        new
+                        {
+                            ID = 2,
+                            Naziv = "Pula",
+                            Opis = "Odlicno"
+                        },
+                        new
+                        {
+                            ID = 3,
+                            Naziv = "Dubrovnik",
+                            Opis = "Najjače"
                         });
                 });
 
@@ -70,6 +82,9 @@ namespace TuristTravel.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("brojZvjezdica")
+                        .HasColumnType("int");
+
                     b.Property<int>("cijenaNocenja")
                         .HasColumnType("int");
 
@@ -83,6 +98,7 @@ namespace TuristTravel.DAL.Migrations
                             ID = 1,
                             Adresa = "Zagreb",
                             Naziv = "Sheraton",
+                            brojZvjezdica = 4,
                             cijenaNocenja = 100
                         });
                 });
@@ -111,16 +127,11 @@ namespace TuristTravel.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PonudaID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Prezime")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("PonudaID");
 
                     b.ToTable("Korisnici");
 
@@ -150,6 +161,9 @@ namespace TuristTravel.DAL.Migrations
                     b.Property<int>("DestinacijaID")
                         .HasColumnType("int");
 
+                    b.Property<int>("HotelID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Naziv")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -168,6 +182,8 @@ namespace TuristTravel.DAL.Migrations
 
                     b.HasIndex("DestinacijaID");
 
+                    b.HasIndex("HotelID");
+
                     b.ToTable("Ponude");
                 });
 
@@ -179,7 +195,7 @@ namespace TuristTravel.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<int>("HotelID")
+                    b.Property<int?>("HotelID")
                         .HasColumnType("int");
 
                     b.Property<int>("KorisnikID")
@@ -203,13 +219,6 @@ namespace TuristTravel.DAL.Migrations
                     b.ToTable("Putovanja");
                 });
 
-            modelBuilder.Entity("TuristTravel.Model.Korisnik", b =>
-                {
-                    b.HasOne("TuristTravel.Model.Ponuda", null)
-                        .WithMany("Korisnici")
-                        .HasForeignKey("PonudaID");
-                });
-
             modelBuilder.Entity("TuristTravel.Model.Ponuda", b =>
                 {
                     b.HasOne("TuristTravel.Model.Destinacija", "Destinacija")
@@ -218,16 +227,22 @@ namespace TuristTravel.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TuristTravel.Model.Hotel", "Hotel")
+                        .WithMany()
+                        .HasForeignKey("HotelID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Destinacija");
+
+                    b.Navigation("Hotel");
                 });
 
             modelBuilder.Entity("TuristTravel.Model.Putovanje", b =>
                 {
-                    b.HasOne("TuristTravel.Model.Hotel", "Hotel")
+                    b.HasOne("TuristTravel.Model.Hotel", null)
                         .WithMany("Putovanja")
-                        .HasForeignKey("HotelID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HotelID");
 
                     b.HasOne("TuristTravel.Model.Korisnik", "Korisnik")
                         .WithMany("Putovanja")
@@ -240,8 +255,6 @@ namespace TuristTravel.DAL.Migrations
                         .HasForeignKey("PonudaID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Hotel");
 
                     b.Navigation("Korisnik");
 
@@ -261,11 +274,6 @@ namespace TuristTravel.DAL.Migrations
             modelBuilder.Entity("TuristTravel.Model.Korisnik", b =>
                 {
                     b.Navigation("Putovanja");
-                });
-
-            modelBuilder.Entity("TuristTravel.Model.Ponuda", b =>
-                {
-                    b.Navigation("Korisnici");
                 });
 #pragma warning restore 612, 618
         }

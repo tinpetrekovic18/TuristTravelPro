@@ -22,13 +22,10 @@ namespace TuristTravel.Model
         [Required]
         [ForeignKey("Ponuda")]
         public int PonudaID { get; set; }
-        public virtual Ponuda Ponuda { get; set; }
+        public Ponuda Ponuda { get; set; }
 
         public string Status { get; set; }
 
-        [Required]
-        [ForeignKey("Hotel")]
-        public int HotelID { get; set; }
-        public virtual Hotel Hotel { get; set; }
+        
     }
 }

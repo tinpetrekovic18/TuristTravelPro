@@ -16,7 +16,7 @@ namespace TuristTravel.Model
         [Required]
         [ForeignKey("Destinacija")]
         public int DestinacijaID { get; set; }
-        public virtual Destinacija Destinacija { get; set; }
+        public Destinacija Destinacija { get; set; }
 
         [Required]
         public string Naziv { get; set; }
@@ -26,10 +26,15 @@ namespace TuristTravel.Model
 		public int Cijena { get; set; }
 
 		[Required]
+		[ForeignKey("Hotel")]
+		public int HotelID { get; set; }
+		public Hotel Hotel { get; set; }
+
+		[Required]
 		public DateTime pocetakPutovanja { get; set; }
 
 		[Required]
 		public DateTime krajPutovanja { get; set; }
-        public virtual ICollection<Korisnik> Korisnici { get; set; }
+     
     }
 }

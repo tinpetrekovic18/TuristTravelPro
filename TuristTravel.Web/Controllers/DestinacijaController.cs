@@ -82,15 +82,16 @@ namespace TuristTravel.Web.Controllers
         public async Task<IActionResult> EditPost(int id)
         {
 
-
+            
+            ModelState.Remove("Ponude");
             var destinacija = _dbContext.Destinacije.Include(p=>p.Ponude).Where(d=>d.ID==id).FirstOrDefault();
+            ModelState.Remove("Ponude");
             if (destinacija == null)
             {
                 return NotFound();
             }
 
-            // Remove validation for properties not being edited
-          //  ModelState.Remove("Ponude");
+            
 
             var ok = await TryUpdateModelAsync(destinacija);
 
@@ -100,12 +101,12 @@ namespace TuristTravel.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // Log ModelState errors
+            
             foreach (var value in ModelState.Values)
             {
                 foreach (var error in value.Errors)
                 {
-                    Console.WriteLine(error.ErrorMessage); // Replace with a proper logging mechanism
+                    Console.WriteLine(error.ErrorMessage); 
                 }
             }
 

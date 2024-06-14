@@ -20,27 +20,15 @@ namespace TuristTravel.DAL
         public DbSet<Ponuda> Ponude { get; set; }
         public DbSet<Putovanje> Putovanja { get; set; }
 
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-		{
-			if (!optionsBuilder.IsConfigured)
-			{
-				optionsBuilder.UseSqlServer("YourConnectionStringHere", sqlOptions =>
-				{
-					sqlOptions.EnableRetryOnFailure(
-						maxRetryCount: 5,
-						maxRetryDelay: TimeSpan.FromSeconds(30),
-						errorNumbersToAdd: null);
-				});
-			}
-		}
+		
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Destinacija>().HasData(new Destinacija { ID = 1, Naziv = "Zagreb", Opis="Very nice" });
-			modelBuilder.Entity<Destinacija>().HasData(new Destinacija { ID = 2, Naziv = "Pula", Opis = "Odlicno" });
-			modelBuilder.Entity<Destinacija>().HasData(new Destinacija { ID = 3, Naziv = "Dubrovnik", Opis = "Najjače" });
+			modelBuilder.Entity<Destinacija>().HasData(new Destinacija { ID = 2, Naziv = "Pula", Opis = "Sehr gut" });
+			modelBuilder.Entity<Destinacija>().HasData(new Destinacija { ID = 3, Naziv = "Dubrovnik", Opis = "Mucho gusto" });
 
 			modelBuilder.Entity<Hotel>().HasData(new Hotel { ID = 1, Naziv = "Sheraton",brojZvjezdica=4, Adresa="Zagreb", cijenaNocenja=100 });
 

@@ -18,13 +18,54 @@ namespace TuristTravel.Web.Controllers
 
         public IActionResult Index(string query = null)
         {
-            var ponudaQuery = _dbContext.Ponude.AsQueryable();
+            var ponudaQuery  = _dbContext.Ponude
+                                        .Include(p => p.Destinacija)
+                                        .Include(p => p.Hotel)
+                                        .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(query))
                 ponudaQuery = ponudaQuery.Where(p => p.Naziv.ToLower().Contains(query.ToLower()));
 
             return View(ponudaQuery.ToList());
         }
+
+        [HttpPost]
+        [Route("IndexFilter")]
+        public IActionResult IndexFilter(PonudaFilterModel? filter = null)
+        {
+            filter ??= new PonudaFilterModel();
+
+            var clientQuery = _dbContext.Ponude
+                                        .Include(p => p.Destinacija)
+                                        .Include(p => p.Hotel)
+                                        .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(filter.Destinacija?.Naziv))
+                clientQuery = clientQuery.Where(p => p.Destinacija.Naziv.ToLower().Contains(filter.Destinacija.Naziv.ToLower()));
+
+            if (!string.IsNullOrWhiteSpace(filter.Naziv))
+                clientQuery = clientQuery.Where(p => p.Naziv.ToLower().Contains(filter.Naziv.ToLower()));
+
+            if (!string.IsNullOrWhiteSpace(filter.Opis))
+                clientQuery = clientQuery.Where(p => p.Opis.ToLower().Contains(filter.Opis.ToLower()));
+
+            if (filter.Cijena != null)
+                clientQuery = clientQuery.Where(p => p.Cijena == filter.Cijena);
+
+            if (!string.IsNullOrWhiteSpace(filter.Hotel?.Naziv))
+                clientQuery = clientQuery.Where(p => p.Hotel.Naziv.ToLower().Contains(filter.Hotel.Naziv.ToLower()));
+
+            if (filter.pocetakPutovanja != null)
+                clientQuery = clientQuery.Where(p => p.pocetakPutovanja == filter.pocetakPutovanja);
+
+            if (filter.krajPutovanja != null)
+                clientQuery = clientQuery.Where(p => p.krajPutovanja == filter.krajPutovanja);
+
+            var model = clientQuery.ToList();
+
+            return PartialView("IndexTable", model);
+        }
+
 
         [HttpPost]
         public ActionResult AdvancedSearch(DestinacijaFilterModel filter)
@@ -45,15 +86,18 @@ namespace TuristTravel.Web.Controllers
         public IActionResult Create()
         {
 			this.FillDropdownValues();
+            this.FillDropdownValues2();
 			return View();
         }
 
         [HttpPost]
         public IActionResult Create(Ponuda model)
         {
-            ModelState.Remove("Ponude");
 
-            if (ModelState.IsValid)
+			ModelState.Remove("Hotel");
+			ModelState.Remove("Destinacija");
+
+			if (ModelState.IsValid)
             {
                 _dbContext.Ponude.Add(model);
                 _dbContext.SaveChanges();
@@ -69,6 +113,7 @@ namespace TuristTravel.Web.Controllers
                 }
             }
 			this.FillDropdownValues();
+			this.FillDropdownValues2();
 			return View(model);
         }
 
@@ -77,23 +122,24 @@ namespace TuristTravel.Web.Controllers
         {
             var model = _dbContext.Ponude.FirstOrDefault(c => c.ID == id);
 			this.FillDropdownValues();
+			this.FillDropdownValues2();
 			return View(model);
         }
 
         [HttpPost]
-        [ActionName(nameof(Edit))]
-        public async Task<IActionResult> EditPost(int id)
-        {
+[ActionName(nameof(Edit))]
+public async Task<IActionResult> EditPost(int id)
+{
 
+            var ponuda = await _dbContext.Ponude.Include(p => p.Destinacija).Include(p => p.Hotel).FirstOrDefaultAsync(p => p.ID == id);
 
-            var ponuda = _dbContext.Ponude.Include(p=>p.Korisnici).Where(d=>d.ID==id).FirstOrDefault();
             if (ponuda == null)
             {
                 return NotFound();
             }
 
-            // Remove validation for properties not being edited
-          //  ModelState.Remove("Ponude");
+            ModelState.Remove("Hotel");
+            ModelState.Remove("Destinacija");
 
             var ok = await TryUpdateModelAsync(ponuda);
 
@@ -103,17 +149,19 @@ namespace TuristTravel.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // Log ModelState errors
             foreach (var value in ModelState.Values)
             {
                 foreach (var error in value.Errors)
                 {
-                    Console.WriteLine(error.ErrorMessage); // Replace with a proper logging mechanism
+                    Console.WriteLine(error.ErrorMessage);
                 }
             }
-			this.FillDropdownValues();
-			return View(ponuda);
+
+            this.FillDropdownValues();
+            this.FillDropdownValues2();
+            return View(ponuda);
         }
+
 		private void FillDropdownValues()
 		{
 			var selectItems = new List<SelectListItem>();
@@ -131,6 +179,25 @@ namespace TuristTravel.Web.Controllers
 			}
 
 			ViewBag.PossibleDestinacije = selectItems;
+		}
+
+		private void FillDropdownValues2()
+		{
+			var selectItems = new List<SelectListItem>();
+
+			//Polje je opcionalno
+			var listItem = new SelectListItem();
+			listItem.Text = "- odaberite -";
+			listItem.Value = "";
+			selectItems.Add(listItem);
+
+			foreach (var category in _dbContext.Hoteli)
+			{
+				listItem = new SelectListItem(category.Naziv, category.ID.ToString());
+				selectItems.Add(listItem);
+			}
+
+			ViewBag.PossibleHoteli = selectItems;
 		}
 	}
 }
